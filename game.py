@@ -44,16 +44,33 @@ class Game:
                for b in self.pos_bomb:
                     if (i[0]-self.grid_scale-250<=b[0]*self.grid_scale<=i[0]+self.grid_scale-250 and b not in already_listed):
                          if(i[1]-self.grid_scale<=b[1]*self.grid_scale<=i[1]+self.grid_scale):
+                              # print(self.tab_grid.index(i),b,"[",int(i[0]/self.grid_scale)-250/self.grid_scale,",",int(i[1]/self.grid_scale),"]")
                               already_listed.append(b)
                               number += 1
                self.detector.append([number,int(i[0]/self.grid_scale)-250/self.grid_scale,int(i[1]/self.grid_scale)])
+          
+          # self.game_surface.fill(GRAY_COLOR_1)
+          # for b in self.pos_bomb:
+          #      surface = pygame.Surface([self.grid_scale,self.grid_scale])
+          #      surface.fill(RED_COLOR)
+          #      self.game_surface.blit(surface , (b[0]*self.grid_scale,b[1]*self.grid_scale))
+          # window.blit(self.game_surface , [250,0])
+          # pygame.display.flip()
+          # time.sleep(5)
      
 
      def game_event(self,screen):
           n_bomb_demined = 0
           for i in self.tab_grid:
+               if self.detector[self.tab_grid.index(i)][0] == 0:
+                    surface = pygame.Surface([self.grid_scale,self.grid_scale])
+                    surface.fill(GRAY_COLOR_1)
+                    self.game_surface.blit(surface , (i[0]-250,i[1])) 
+          for i in self.tab_grid:
                if(i[2] == "BOMB" and i[3] == True):
                     n_bomb_demined += 1
+          
+          print(n_bomb_demined,self.n_bomb)
           
           if n_bomb_demined == self.n_bomb:
                self.levelup = True
@@ -88,7 +105,7 @@ class Game:
                                    surface = pygame.Surface([self.grid_scale,self.grid_scale])
                                    surface.fill(GRAY_COLOR_1)
                                    self.game_surface.blit(surface , (i[0]-250,i[1]))
-                                   self.game_surface.blit(pygame.font.Font(None , 2*int(self.grid_scale/2)).render(f"{self.detector[self.tab_grid.index(i)][0]}",True,(0,0,0)) , [i[0]+int(self.grid_scale/4)-250 , i[1]+int(self.grid_scale/4)])    
+                                   self.game_surface.blit(pygame.font.Font(None , 2*int(self.grid_scale/2)).render(f"{self.detector[self.tab_grid.index(i)][0]}",True,(0,0,0)) , [i[0]+int(self.grid_scale/4)-250 , i[1]+int(self.grid_scale/4)])
                                    break
 
                               elif(i[0] < pos[0] < i[0]+self.grid_scale and i[1] < pos[1] < i[1]+self.grid_scale and i[2] == "BOMB"):
