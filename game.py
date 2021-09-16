@@ -10,22 +10,27 @@ GREEN_COLOR = [113, 230, 78]
 
 class Game:
 
-     def __init__(self,window,grid=50):
+     def __init__(self,window,grid=50,n_bomb=10):
           self.gs_size = [450,450]
           self.grid_scale = grid
-          self.levelup = False
+          self.finished = False
           self.game_surface = pygame.Surface(self.gs_size)
           self.game_surface.fill([131, 135, 138])
           window.blit(self.game_surface , [250,0])
           self.run = True
           self.lose = False
-          self.n_bomb = int((self.gs_size[0] / self.grid_scale)**2/4)
+          self.n_bomb = n_bomb
           self.tab_grid = []
           self.pos_bomb = []
           self.detector = []
 
           for a in range(0,self.n_bomb):
-               self.pos_bomb.append([random.randint(0,450/self.grid_scale-1),random.randint(0,450/self.grid_scale-1)])
+               final_pos = False
+               while not final_pos:
+                    pos = [random.randint(0,450/self.grid_scale-1),random.randint(0,450/self.grid_scale-1)]
+                    if(not pos in self.pos_bomb):
+                         self.pos_bomb.append(pos)
+                         final_pos = True
 
           for j in range(0,int(450/self.grid_scale)):
                for i in range(0,int(450/self.grid_scale)):
@@ -49,14 +54,14 @@ class Game:
                               number += 1
                self.detector.append([number,int(i[0]/self.grid_scale)-250/self.grid_scale,int(i[1]/self.grid_scale)])
           
-          # self.game_surface.fill(GRAY_COLOR_1)
-          # for b in self.pos_bomb:
-          #      surface = pygame.Surface([self.grid_scale,self.grid_scale])
-          #      surface.fill(RED_COLOR)
-          #      self.game_surface.blit(surface , (b[0]*self.grid_scale,b[1]*self.grid_scale))
-          # window.blit(self.game_surface , [250,0])
-          # pygame.display.flip()
-          # time.sleep(5)
+          self.game_surface.fill(GRAY_COLOR_1)
+          for b in self.pos_bomb:
+               surface = pygame.Surface([self.grid_scale,self.grid_scale])
+               surface.fill(RED_COLOR)
+               self.game_surface.blit(surface , (b[0]*self.grid_scale,b[1]*self.grid_scale))
+          window.blit(self.game_surface , [250,0])
+          pygame.display.flip()
+          # # time.sleep(5)
      
 
      def game_event(self,screen):
@@ -70,11 +75,8 @@ class Game:
                if(i[2] == "BOMB" and i[3] == True):
                     n_bomb_demined += 1
           
-          print(n_bomb_demined,self.n_bomb)
-          
-          if n_bomb_demined == self.n_bomb:
-               self.levelup = True
-
+          if(n_bomb_demined == self.n_bomb):
+               self.finished = True
 
           for event in pygame.event.get():
                if event.type == pygame.QUIT:
