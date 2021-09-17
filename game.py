@@ -1,16 +1,14 @@
 import pygame
 import random
 import time
+from constants import *
 
 pygame.init()
-
-RED_COLOR = (222, 57, 35)
-GRAY_COLOR_1 = [100, 103, 107]
-GREEN_COLOR = [113, 230, 78]
 
 class Game:
 
      def __init__(self,window,panel,grid=50,n_bomb=10):
+          self.await_user_action = False
           self.panel = panel
           self.gs_size = [450,450]
           self.grid_scale = grid
@@ -60,18 +58,17 @@ class Game:
           for i in self.tab_grid:
                if self.detector[self.tab_grid.index(i)][0] == 0:
                     surface = pygame.Surface([self.grid_scale,self.grid_scale])
-                    surface.fill(GRAY_COLOR_1)
+                    surface.fill(GRAY_COLOR_2)
                     self.game_surface.blit(surface , (i[0]-250,i[1])) 
                     self.game_surface.blit(pygame.font.Font(None , 2*int(self.grid_scale/2)).render(f"{self.detector[self.tab_grid.index(i)][0]}",True,(0,0,0)) , [i[0]+int(self.grid_scale/4)-248 , i[1]+int(self.grid_scale/4)])
           
-          # self.game_surface.fill(GRAY_COLOR_1)
+          # self.game_surface.fill(GRAY_COLOR_2)
           # for b in self.pos_bomb:
           #      surface = pygame.Surface([self.grid_scale,self.grid_scale])
           #      surface.fill(RED_COLOR)
           #      self.game_surface.blit(surface , (b[0]*self.grid_scale,b[1]*self.grid_scale))
           # window.blit(self.game_surface , [250,0])
           # pygame.display.flip()
-          # # time.sleep(5)
      
 
      def game_event(self,screen):
@@ -83,8 +80,8 @@ class Game:
           
           self.bomb_demined = bomb_demined
 
-          self.panel.plabel_1.text = f"Flag remaining : {self.nfcp}"
-          self.panel.plabel_1.apply(self.panel.surface)
+          plabel_1.text = f"Flag remaining : {self.nfcp}"
+          plabel_1.apply(self.panel)
           
           if(self.bomb_demined == self.n_bomb):
                self.finished = True
@@ -93,64 +90,64 @@ class Game:
                if event.type == pygame.QUIT:
                     self.run = False
                if event.type == pygame.MOUSEMOTION:
-                    if self.panel.pbutton_1.pos[0] < event.pos[0] < self.panel.pbutton_1.pos[0]+self.panel.pbutton_1.rect_size[0] and self.panel.pbutton_1.pos[1] < event.pos[1] < self.panel.pbutton_1.pos[1]+self.panel.pbutton_1.rect_size[1]:
-                         self.panel.pbutton_1.is_overflight = True
+                    if pbutton_1.pos[0] < event.pos[0] < pbutton_1.pos[0]+pbutton_1.rect_size[0] and pbutton_1.pos[1] < event.pos[1] < pbutton_1.pos[1]+pbutton_1.rect_size[1]:
+                         pbutton_1.is_overflight = True
                     else:
-                         self.panel.pbutton_1.is_overflight = False
+                         pbutton_1.is_overflight = False
                     
                if event.type == pygame.MOUSEBUTTONUP:
 
                     pos = event.pos
 
-                    if self.panel.pbutton_1.is_overflight and event.button == 1:
-                         self.panel.pbutton_1.clicked()
+                    if pbutton_1.is_overflight and event.button == 1:
+                         pbutton_1.clicked()
 
-                    if pos[0] <= 250 :
-                         return
-                    if event.button == 3:
-                         
-                         for i in self.tab_grid:
-                              if(i[0] < pos[0] < i[0]+self.grid_scale and i[1] < pos[1] < i[1]+self.grid_scale and not i[3] and self.nfcp != 0 and not i[4] == "VISIBLE"):
-                                   surface = pygame.Surface([self.grid_scale,self.grid_scale])
-                                   surface.fill(GREEN_COLOR)
-                                   self.game_surface.blit(surface , (i[0]-250,i[1]))
-                                   self.game_surface.blit(pygame.font.Font(None , 2*int(self.grid_scale/2)).render(f"D",True,(0,0,0)) , [i[0]+int(self.grid_scale/4)-251 , i[1]+int(self.grid_scale/4)])
-                                   i[3] = True
-                                   self.nfcp -= 1
-                                   i[4] = "FLAGED"  
-                                   break
-                              elif(i[0] < pos[0] < i[0]+self.grid_scale and i[1] < pos[1] < i[1]+self.grid_scale and i[3] and not i[4] == "VISIBLE"):
-                                   surface = pygame.Surface([self.grid_scale,self.grid_scale])
-                                   surface.fill([131, 135, 138])
-                                   self.game_surface.blit(surface , (i[0]-250,i[1]))
-                                   i[3] = False
-                                   self.nfcp += 1
-                                   i[4] = "NONE" 
-                                   break
+                    if not self.await_user_action: 
 
-                    elif event.button == 1:
-
-                         print(self.panel.pbutton_1.is_overflight)
-                         
-                         for i in self.tab_grid:
-                              if(i[0] < pos[0] < i[0]+self.grid_scale and i[1] < pos[1] < i[1]+self.grid_scale and i[2] == "NONE"):
-                                   if i[4] == "FLAGED":
-                                        self.nfcp += 1
-                                        i[4] = "VISIBLE"
-                                   surface = pygame.Surface([self.grid_scale,self.grid_scale])
-                                   surface.fill(GRAY_COLOR_1)
-                                   self.game_surface.blit(surface , (i[0]-250,i[1]))
-                                   self.game_surface.blit(pygame.font.Font(None , 2*int(self.grid_scale/2)).render(f"{self.detector[self.tab_grid.index(i)][0]}",True,(0,0,0)) , [i[0]+int(self.grid_scale/4)-251 , i[1]+int(self.grid_scale/4)])
-                                   break
-
-                              elif(i[0] < pos[0] < i[0]+self.grid_scale and i[1] < pos[1] < i[1]+self.grid_scale and i[2] == "BOMB"):
-                                   self.game_surface.fill(GRAY_COLOR_1)
-                                   for b in self.pos_bomb:
+                         if pos[0] <= 250 :
+                              return
+                         if event.button == 3:
+                              
+                              for i in self.tab_grid:
+                                   if(i[0] < pos[0] < i[0]+self.grid_scale and i[1] < pos[1] < i[1]+self.grid_scale and not i[3] and self.nfcp != 0 and not i[4] == "VISIBLE"):
                                         surface = pygame.Surface([self.grid_scale,self.grid_scale])
-                                        surface.fill(RED_COLOR)
-                                        self.game_surface.blit(surface , (b[0]*self.grid_scale,b[1]*self.grid_scale))
-                                   screen.blit(self.game_surface , [250,0])
-                                   pygame.display.flip()
-                                   time.sleep(5)
-                                   self.lose = True
-                                   break
+                                        surface.fill(GREEN_COLOR)
+                                        self.game_surface.blit(surface , (i[0]-250,i[1]))
+                                        self.game_surface.blit(pygame.font.Font(None , 2*int(self.grid_scale/2)).render(f"D",True,(0,0,0)) , [i[0]+int(self.grid_scale/4)-248 , i[1]+int(self.grid_scale/4)])
+                                        i[3] = True
+                                        self.nfcp -= 1
+                                        i[4] = "FLAGED"  
+                                        break
+                                   elif(i[0] < pos[0] < i[0]+self.grid_scale and i[1] < pos[1] < i[1]+self.grid_scale and i[3] and not i[4] == "VISIBLE"):
+                                        surface = pygame.Surface([self.grid_scale,self.grid_scale])
+                                        surface.fill([131, 135, 138])
+                                        self.game_surface.blit(surface , (i[0]-250,i[1]))
+                                        i[3] = False
+                                        self.nfcp += 1
+                                        i[4] = "NONE" 
+                                        break
+
+                         elif event.button == 1:
+                              
+                              for i in self.tab_grid:
+                                   if(i[0] < pos[0] < i[0]+self.grid_scale and i[1] < pos[1] < i[1]+self.grid_scale and i[2] == "NONE"):
+                                        if i[4] == "FLAGED":
+                                             self.nfcp += 1
+                                             i[4] = "VISIBLE"
+                                        surface = pygame.Surface([self.grid_scale,self.grid_scale])
+                                        surface.fill(GRAY_COLOR_2)
+                                        self.game_surface.blit(surface , (i[0]-250,i[1]))
+                                        self.game_surface.blit(pygame.font.Font(None , 2*int(self.grid_scale/2)).render(f"{self.detector[self.tab_grid.index(i)][0]}",True,(0,0,0)) , [i[0]+int(self.grid_scale/4)-248 , i[1]+int(self.grid_scale/4)])
+                                        break
+
+                                   elif(i[0] < pos[0] < i[0]+self.grid_scale and i[1] < pos[1] < i[1]+self.grid_scale and i[2] == "BOMB"):
+                                        self.game_surface.fill(GRAY_COLOR_2)
+                                        for b in self.pos_bomb:
+                                             surface = pygame.Surface([self.grid_scale,self.grid_scale])
+                                             surface.fill(RED_COLOR)
+                                             self.game_surface.blit(surface , (b[0]*self.grid_scale,b[1]*self.grid_scale))
+                                        screen.blit(self.game_surface , [250,0])
+                                        pygame.display.flip()
+                                        time.sleep(5)
+                                        self.lose = True
+                                        break
