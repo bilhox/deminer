@@ -1,5 +1,4 @@
 # deminor
-simple deminor on Python with the module Pygame
 Hey everyone , welcome to my second game !
 I hope you will enjoy the game !
 
