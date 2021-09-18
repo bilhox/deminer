@@ -64,7 +64,7 @@ class Game:
                     surface.fill(GRAY_COLOR_2)
                     self.game_surface.blit(surface , (i[0]-self.panel_width,i[1])) 
                     self.game_surface.blit(pygame.font.Font(None , 2*int(self.grid_scale/2)).render(f"{self.detector[self.tab_grid.index(i)][0]}",True,(0,0,0)) , [i[0]+int(self.grid_scale/4)-(self.panel_width-2) , i[1]+int(self.grid_scale/4)])
-          
+          # CHEAT CODE :
           # self.game_surface.fill(GRAY_COLOR_2)
           # for b in self.pos_bomb:
           #      surface = pygame.Surface([self.grid_scale,self.grid_scale])

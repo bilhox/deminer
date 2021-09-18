@@ -6,7 +6,7 @@ pygame.font.init()
 texts =["You demined all the bombs !","Enjoy the game ! :)","Tips :",
      "1 - <Right-click> to place flag",
      "2 - <Left-click> to show cases",
-     "3 - The case number equals to the ",
+     "3 - The box numbers equals to the ",
      " bomb number around"]
 gs_size = [ [450,450] , [500,500] , [600,600] , [650,650]]
 
