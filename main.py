@@ -9,7 +9,12 @@ n_bomb = [50,65,80,110]
 await_user_reset = False
 level = 0
 
+#icon
+icon = pygame.image.load("./imgs/logo bilhox.png")
+
 window = pygame.display.set_mode(win_size)
+pygame.display.set_caption("Deminor - V1.4.2 - By bilhox")
+pygame.display.set_icon(icon)
 window.fill([193, 198, 199])
 panel = pygame.Surface([250,450])
 panel.fill(GRAY_COLOR)
