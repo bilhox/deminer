@@ -5,12 +5,15 @@ from constants import *
 
 class Plabel:
 
-     def __init__(self ,text,font,rect_color=[255,255,255],font_color=[0,0,0], pos=[0,0] , rect_size=[50,50]):
+     line_space = 3
+
+     def __init__(self ,text,font,rect_color=[255,255,255],padding=[0,0],font_color=[0,0,0], pos=[0,0] , rect_size=[50,50]):
 
           self.text = text
           self.rect_size = rect_size
           self.rect_color = rect_color
           self.font_color = font_color
+          self.padding = padding
           self.pos = pos
           self.surface = pygame.Surface(rect_size,pygame.SRCALPHA)
           self.surface.fill(rect_color)
@@ -24,6 +27,17 @@ class Plabel:
           text_pos= [ self.rect_size[0]/2 - self.font.size(self.text)[0]/2, self.rect_size[1]/2 - self.font.size(self.text)[1]/2 ]
           self.surface.blit(render , text_pos)
           panel.blit(self.surface,self.pos)
+     
+     def compact_line(surface, *labels , padding=[25,25]):
+
+          pos = padding
+          for label in labels:
+               pos_l = [ pos[0]+label.padding[0], pos[1]+label.padding[1] ]
+               render = label.font.render(label.text , True , label.font_color)
+               surface.blit(render , pos_l)
+               pos = [  pos[0] , pos[1]+render.get_rect()[3]+Plabel.line_space+label.padding[1] ]
+          
+          return surface
 
 class Pbutton:
      

@@ -54,7 +54,6 @@ class Game:
                for b in self.pos_bomb:
                     if (i[0]-self.grid_scale-self.panel_width<=b[0]*self.grid_scale<=i[0]+self.grid_scale-self.panel_width and b not in already_listed):
                          if(i[1]-self.grid_scale<=b[1]*self.grid_scale<=i[1]+self.grid_scale):
-                              # print(self.tab_grid.index(i),b,"[",int(i[0]/self.grid_scale)-250/self.grid_scale,",",int(i[1]/self.grid_scale),"]")
                               already_listed.append(b)
                               number += 1
                self.detector.append([number,int(i[0]/self.grid_scale)-self.panel_width/self.grid_scale,int(i[1]/self.grid_scale)])
@@ -101,8 +100,6 @@ class Game:
                     pos = event.pos
 
                     Pbutton.on_click(event.button,pbutton_1 , lowerlevel_button , uplevel_button)
-                    # if pbutton_1.is_overflight and event.button == 1:
-                    #      pbutton_1.clicked()
 
                     if not self.await_user_action: 
 
@@ -112,10 +109,11 @@ class Game:
                               
                               for i in self.tab_grid:
                                    if(i[0] < pos[0] < i[0]+self.grid_scale and i[1] < pos[1] < i[1]+self.grid_scale and not i[3] and self.nfcp != 0 and not i[4] == "VISIBLE"):
-                                        surface = pygame.Surface([self.grid_scale,self.grid_scale])
-                                        surface.fill(GREEN_COLOR)
+                                        img = pygame.image.load("./imgs/flag.png")
+                                        surface = pygame.Surface([self.grid_scale , self.grid_scale])
+                                        surface.fill(GRAY_COLOR_1)
+                                        surface.blit(img,[0,0])
                                         self.game_surface.blit(surface , (i[0]-self.panel_width,i[1]))
-                                        self.game_surface.blit(pygame.font.Font(None , 2*int(self.grid_scale/2)).render(f"D",True,(0,0,0)) , [i[0]+int(self.grid_scale/4)-(self.panel_width-2) , i[1]+int(self.grid_scale/4)])
                                         i[3] = True
                                         self.nfcp -= 1
                                         i[4] = "FLAGED"  

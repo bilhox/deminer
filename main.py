@@ -13,11 +13,15 @@ level = 0
 icon = pygame.image.load("./imgs/logo bilhox.png")
 
 window = pygame.display.set_mode(win_size)
-pygame.display.set_caption("Deminor - V1.4.2 - By bilhox")
+tuto = pygame.Surface([230,160])
+pygame.display.set_caption("Deminor - V1.4.3 - By bilhox")
 pygame.display.set_icon(icon)
 window.fill([193, 198, 199])
 panel = pygame.Surface([250,450])
 panel.fill(GRAY_COLOR)
+tuto.fill(GRAY_COLOR_2)
+Plabel.compact_line(tuto, tuto6_label ,tuto1_label,tuto2_label , tuto3_label , tuto4_label , tuto5_label, padding=[5,0])
+panel.blit(tuto , [10 , 180])
 game = Game(window,panel,gs_size=gs_size[level],grid=25,n_bomb=n_bomb[level])
 clock = pygame.time.Clock()
 timer = 0
@@ -35,6 +39,7 @@ def levelup():
      global panel
      global level
      global timer
+     global tuto
 
      timer = 0
 
@@ -47,6 +52,10 @@ def levelup():
           panel = pygame.Surface([250,gs_size[level][1]])
           panel.fill(GRAY_COLOR)
           game = Game(window,panel,gs_size=gs_size[level],grid=25,n_bomb=n_bomb[level])
+          tuto.fill(GRAY_COLOR_2)
+          Plabel.compact_line(tuto, tuto6_label ,tuto1_label,tuto2_label , tuto3_label , tuto4_label , tuto5_label, padding=[5,0])
+          panel.blit(tuto , [10 , 180])
+          window.blit(panel , [0,0])
           window.blit(game.game_surface , [250,0])
      else:
           level = 0
@@ -57,6 +66,10 @@ def levelup():
           panel = pygame.Surface([250,gs_size[level][1]])
           panel.fill(GRAY_COLOR)
           game = Game(window,panel,gs_size=gs_size[level],grid=25,n_bomb=n_bomb[level])
+          tuto.fill(GRAY_COLOR_2)
+          Plabel.compact_line(tuto, tuto6_label ,tuto1_label,tuto2_label , tuto3_label , tuto4_label , tuto5_label, padding=[5,0])
+          panel.blit(tuto , [10 , 180])
+          window.blit(panel , [0,0])
           window.blit(game.game_surface , [250,0])
 
 def lowerlevel():
@@ -65,6 +78,7 @@ def lowerlevel():
      global panel
      global level
      global timer
+     global tuto
 
      timer = 0
 
@@ -77,6 +91,10 @@ def lowerlevel():
           panel = pygame.Surface([250,gs_size[level][1]])
           panel.fill(GRAY_COLOR)
           game = Game(window,panel,gs_size=gs_size[level],grid=25,n_bomb=n_bomb[level])
+          tuto.fill(GRAY_COLOR_2)
+          Plabel.compact_line(tuto, tuto6_label ,tuto1_label,tuto2_label , tuto3_label , tuto4_label , tuto5_label, padding=[5,0])
+          panel.blit(tuto , [10 , 180])
+          window.blit(panel , [0,0])
           window.blit(game.game_surface , [250,0])
      else:
           level = 3
@@ -87,6 +105,10 @@ def lowerlevel():
           panel = pygame.Surface([250,gs_size[level][1]])
           panel.fill(GRAY_COLOR)
           game = Game(window,panel,gs_size=gs_size[level],grid=25,n_bomb=n_bomb[level])
+          tuto.fill(GRAY_COLOR_2)
+          Plabel.compact_line(tuto, tuto6_label ,tuto1_label,tuto2_label , tuto3_label , tuto4_label , tuto5_label, padding=[5,0])
+          panel.blit(tuto , [10 , 180])
+          window.blit(panel , [0,0])
           window.blit(game.game_surface , [250,0])
 
 
