@@ -5,9 +5,7 @@ from panel import *
 from constants import *
 
 win_size = [700,450]
-level_tab = [50,30,25,10]
-n_bomb = [8,20,50,200]
-texts =["You demined all the bombs !","thanks for played !"]
+n_bomb = [50,65,80,110]
 await_user_reset = False
 level = 0
 
@@ -15,22 +13,86 @@ window = pygame.display.set_mode(win_size)
 window.fill([193, 198, 199])
 panel = pygame.Surface([250,450])
 panel.fill(GRAY_COLOR)
-game_finished_label = Plabel(texts[0],FONT_1,font_color=[200,200,200],rect_color=[11, 11, 11, 96],rect_size=[450,450])
-game = Game(window,panel,grid=level_tab[2],n_bomb=n_bomb[2])
+game = Game(window,panel,gs_size=gs_size[level],grid=25,n_bomb=n_bomb[level])
 clock = pygame.time.Clock()
 timer = 0
 tick = 0
 
 plabel_2.text = f"Time : {timer}"
 plabel_2.apply(panel)
+pbutton_1.apply(panel)
+uplevel_button.apply(panel)
+lowerlevel_button.apply(panel)
+
+def levelup():
+     global game
+     global window
+     global panel
+     global level
+     global timer
+
+     timer = 0
+
+     level += 1
+     if level <= 3:
+          pbutton_1.pos[1] = gs_size[level][1]-50
+          lowerlevel_button.pos[1] = gs_size[level][1]-100
+          uplevel_button.pos[1] = gs_size[level][1]-100
+          window = pygame.display.set_mode([250+gs_size[level][0],gs_size[level][1]])
+          panel = pygame.Surface([250,gs_size[level][1]])
+          panel.fill(GRAY_COLOR)
+          game = Game(window,panel,gs_size=gs_size[level],grid=25,n_bomb=n_bomb[level])
+          window.blit(game.game_surface , [250,0])
+     else:
+          level = 0
+          pbutton_1.pos[1] = gs_size[level][1]-50
+          lowerlevel_button.pos[1] = gs_size[level][1]-100
+          uplevel_button.pos[1] = gs_size[level][1]-100
+          window = pygame.display.set_mode([250+gs_size[level][0],gs_size[level][1]])
+          panel = pygame.Surface([250,gs_size[level][1]])
+          panel.fill(GRAY_COLOR)
+          game = Game(window,panel,gs_size=gs_size[level],grid=25,n_bomb=n_bomb[level])
+          window.blit(game.game_surface , [250,0])
+
+def lowerlevel():
+     global game
+     global window
+     global panel
+     global level
+     global timer
+
+     timer = 0
+
+     level-=1
+     if level >= 0:
+          pbutton_1.pos[1] = gs_size[level][1]-50
+          lowerlevel_button.pos[1] = gs_size[level][1]-100
+          uplevel_button.pos[1] = gs_size[level][1]-100
+          window = pygame.display.set_mode([250+gs_size[level][0],gs_size[level][1]])
+          panel = pygame.Surface([250,gs_size[level][1]])
+          panel.fill(GRAY_COLOR)
+          game = Game(window,panel,gs_size=gs_size[level],grid=25,n_bomb=n_bomb[level])
+          window.blit(game.game_surface , [250,0])
+     else:
+          level = 3
+          pbutton_1.pos[1] = gs_size[level][1]-50
+          lowerlevel_button.pos[1] = gs_size[level][1]-100
+          uplevel_button.pos[1] = gs_size[level][1]-100
+          window = pygame.display.set_mode([250+gs_size[level][0],gs_size[level][1]])
+          panel = pygame.Surface([250,gs_size[level][1]])
+          panel.fill(GRAY_COLOR)
+          game = Game(window,panel,gs_size=gs_size[level],grid=25,n_bomb=n_bomb[level])
+          window.blit(game.game_surface , [250,0])
+
 
 def lose():
      global game
      global timer
      game.game_surface.fill([131, 135, 138])
-     game = Game(window,panel,grid=level_tab[2],n_bomb=n_bomb[2])
+     game = Game(window,panel,gs_size=gs_size[level],grid=25,n_bomb=n_bomb[level])
      window.blit(game.game_surface , [250,0])
      timer = 0
+     
 
 def flip():
      window.blit(game.game_surface , [250,0])
@@ -39,6 +101,8 @@ def flip():
      pygame.display.flip()
 
 pbutton_1.function_target = lose
+uplevel_button.function_target = levelup
+lowerlevel_button.function_target = lowerlevel
 
 while game.run:
 
@@ -49,28 +113,17 @@ while game.run:
           tick=0
      
      if game.lose:
-          game.await_user_action = False
-          game.finished = False
-          game.game_surface.fill([131, 135, 138])
-          game = Game(window,panel,grid=level_tab[2],n_bomb=n_bomb[2])
-          window.blit(game.game_surface , [250,0])
-          level = 0
+          lose()
           timer = 0
      
      if game.finished and not game.await_user_action:
           
+          game_finished_label.rect_size = gs_size[level]
           game_finished_label.apply(game.game_surface)
           timer = 0
           game.await_user_action = True
           flip()
-          # game.game_surface.fill([131, 135, 138])
-          # game = Game(window,panel,grid=level_tab[2],n_bomb=n_bomb[2])
-          # window.blit(game.game_surface , [250,0])
-     
-     if pbutton_1.is_overflight:
-          pbutton_1.overfly(panel)
-     else:
-          pbutton_1.apply(panel)
+
      flip()
      clock.tick(60)
      tick+=1
