@@ -14,7 +14,7 @@ icon = pygame.image.load("./imgs/logo bilhox.png")
 
 window = pygame.display.set_mode(win_size)
 tuto = pygame.Surface([230,160])
-pygame.display.set_caption("Deminor - V1.4.3 - By bilhox")
+pygame.display.set_caption("Deminer - V1.4.3 - By bilhox")
 pygame.display.set_icon(icon)
 window.fill([193, 198, 199])
 panel = pygame.Surface([250,450])
